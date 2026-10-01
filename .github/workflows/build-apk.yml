@@ -18,26 +18,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Ensure .env exists
+        run: |
+          echo "GEMINI_API_KEY=dummy_key" > .env
+          if [ -d "app" ]; then
+            echo "GEMINI_API_KEY=dummy_key" > app/.env
+          fi
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Ensure .env exists
+      - name: Build Debug APK with Gradle
         run: |
-          if [ ! -f .env ]; then
-            echo "GEMINI_API_KEY=dummy_key" > .env
-          fi
-
-      - name: Grant execute permission for gradlew
-        run: |
-          if [ -f gradlew ]; then
+          if [ -f "gradlew" ]; then
             chmod +x gradlew
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
           fi
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: VocoPlan-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: "**/build/outputs/apk/debug/*.apk"
