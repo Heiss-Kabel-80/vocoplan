@@ -12,33 +12,36 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Ensure .env exists
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create local.properties and .env
         run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "GEMINI_API_KEY=dummy_key" > .env
           if [ -d "app" ]; then
             echo "GEMINI_API_KEY=dummy_key" > app/.env
+            echo "sdk.dir=$ANDROID_HOME" > app/local.properties
           fi
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Build Debug APK with Gradle
+      - name: Ensure gradlew exists
         run: |
-          if [ -f "gradlew" ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
+          if [ ! -f "gradlew" ]; then
+            gradle wrapper
           fi
+          chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: VocoPlan-APK
-          path: "**/build/outputs/apk/debug/*.apk"
+          path: "**/build/outputs/apk/**/*.apk"
