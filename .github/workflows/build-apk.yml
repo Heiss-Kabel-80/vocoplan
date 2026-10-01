@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Environment and Dummy Files
+      - name: Setup Environment and Files
         run: |
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
@@ -32,7 +32,7 @@ jobs:
             echo "sdk.dir=$ANDROID_SDK_ROOT" > app/local.properties
           fi
 
-          # Debug Keystore generieren, falls er fehlt
+          # Debug Keystore erzeugen
           if [ ! -f "debug.keystore" ]; then
             keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
@@ -40,9 +40,9 @@ jobs:
             cp debug.keystore app/debug.keystore
           fi
 
-          # Dummy google-services.json erzeugen, falls erforderlich
-          if [ -d "app" ] && [ ! -f "app/google-services.json" ]; then
-            echo '{"project_info":{"project_number":"123456789","project_id":"vocoplan-dummy"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:abcdef","android_client_info":{"package_name":"com.vocoplan.app"}},"api_key":[{"current_key":"dummy"}]}]}' > app/google-services.json
+          # Exakte google-services.json mit dem passenden Paketnamen anlegen
+          if [ -d "app" ]; then
+            echo '{"project_info":{"project_number":"123456789","project_id":"vocoplan-dummy"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:abcdef","android_client_info":{"package_name":"com.aistudio.vocoplan.krwtpq"}},"api_key":[{"current_key":"dummy"}]}]}' > app/google-services.json
           fi
 
       - name: Ensure gradlew exists
