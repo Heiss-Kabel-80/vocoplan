@@ -18,13 +18,19 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Environment
+      - name: Setup Environment Files
         run: |
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          
+          # Erstelle .env und .env.example im Hauptverzeichnis
           echo "GEMINI_API_KEY=dummy_key" > .env
+          echo "GEMINI_API_KEY=dummy_key" > .env.example
+          
+          # Erstelle sie sicherheitshalber auch im app-Ordner
           if [ -d "app" ]; then
             echo "GEMINI_API_KEY=dummy_key" > app/.env
+            echo "GEMINI_API_KEY=dummy_key" > app/.env.example
             echo "sdk.dir=$ANDROID_SDK_ROOT" > app/local.properties
           fi
 
