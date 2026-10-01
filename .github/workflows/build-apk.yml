@@ -18,16 +18,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Create local.properties and .env
+      - name: Setup Environment
         run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           echo "GEMINI_API_KEY=dummy_key" > .env
           if [ -d "app" ]; then
             echo "GEMINI_API_KEY=dummy_key" > app/.env
-            echo "sdk.dir=$ANDROID_HOME" > app/local.properties
+            echo "sdk.dir=$ANDROID_SDK_ROOT" > app/local.properties
           fi
 
       - name: Ensure gradlew exists
