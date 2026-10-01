@@ -1,0 +1,6 @@
+{
+  "name": "VocoPlan",
+  "description": "Lokale Sprach-Terminplanung für Kalender ohne Cloud und ohne API-Keys",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

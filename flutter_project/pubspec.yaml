@@ -1,0 +1,23 @@
+name: vocoplan
+description: "VocoPlan - Lokale Sprach-Terminplanung für Kalender"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  speech_to_text: ^6.6.1
+  device_calendar: ^4.3.2
+  permission_handler: ^11.3.1
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
